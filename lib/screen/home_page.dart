@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool original = true;
+  bool frame1 = false;
+  bool frame2 = false;
+  bool frame3 = false;
+  bool frame4 = false;
   final ImagePicker _picker = ImagePicker();
   double _rotationAngle = 0;
   bool _isFlipped = false;
@@ -31,12 +37,11 @@ class _HomePageState extends State<HomePage> {
       // Request permission
       PermissionStatus newStatus = await Permission.storage.request();
       if (newStatus.isGranted) {
-        return;  // Permission granted
+        return; // Permission granted
       } else {
-        // If permission denied, show a snackbar or toast
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Permission denied to access storage')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Permission denied to access storage')),
+        // );
       }
     } else if (status.isPermanentlyDenied) {
       // If permission is permanently denied, redirect user to settings
@@ -56,8 +61,9 @@ class _HomePageState extends State<HomePage> {
       if (imageFile != null) {
         setState(() {
           _image = File(imageFile!.path);
-          _isImageSelected = true;
+          // _isImageSelected = true;
         });
+        _showImageDialog();
       }
     }
   }
@@ -93,6 +99,183 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _showImageDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Uploaded Image',
+                style: TextStyle(fontSize: 28),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              if(original)
+              Image.file(_image!),
+              if(frame1)
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/frame_1.png'),fit: BoxFit.cover)
+                  ),
+                  child: Image.file(_image!),
+                ),
+              const SizedBox(height: 10),
+              FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Original',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black.withOpacity(0.7)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          frame1 = true;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/frame_1.png',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/frame_2.png',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/frame_3.png',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/frame_4.png',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isImageSelected = true;
+                    Navigator.of(context).pop();
+                  });
+                },
+                child: Container(
+                  height: 50,
+                  width: 230,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.teal,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Use this image',
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -100,13 +283,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 15),
-          child: IconButton(onPressed: () {}, icon: Icon((Icons.arrow_back_ios), size: 35)),
+          child: IconButton(
+              onPressed: () {}, icon: Icon((Icons.arrow_back_ios), size: 35)),
         ),
         elevation: 10,
         backgroundColor: Colors.white,
         title: Text(
           'Add Image / Icon',
-          style: TextStyle(fontSize: 28, fontStyle: FontStyle.italic, color: Colors.black.withOpacity(0.6)),
+          style: TextStyle(
+              fontSize: 28,
+              fontStyle: FontStyle.italic,
+              color: Colors.black.withOpacity(0.6)),
         ),
         centerTitle: true,
         // actions: [
@@ -150,7 +337,6 @@ class _HomePageState extends State<HomePage> {
                     GestureDetector(
                       onTap: () {
                         pickImage();
-                        print('click');
                       },
                       child: Container(
                         height: 50,
@@ -167,20 +353,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
               SizedBox(height: 30),
               if (_isImageSelected)
                 Container(
-                  height: size.height*0.4,
+                  height: size.height * 0.4,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: FileImage(File(_image!.path)),
-                      fit: BoxFit.cover
-                    ),
+                        fit: BoxFit.cover),
                   ),
                 ),
             ],
