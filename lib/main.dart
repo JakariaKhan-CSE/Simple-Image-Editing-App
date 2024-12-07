@@ -13,10 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Image Editing App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+
+      theme: ThemeData.light(),
       home: HomePage(),
     );
   }
